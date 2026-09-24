@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sadhana: Yoga & Mindfulness Companion</title>
+<style>
+  :root{
+    --bg:#f7f4ee; --card:#ffffff; --ink:#2d2a26; --muted:#7a756c;
+    --accent:#6d7f5f; --accent2:#c98a5b; --line:#e5e0d5; --chip:#eef1e8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--ink);min-height:100vh}
+  .sans{font-family:'Helvetica Neue',Arial,sans-serif}
+  header{background:linear-gradient(135deg,#4a5640,#6d7f5f);color:#fff;padding:28px 24px 20px}
+  header h1{font-size:1.6rem;font-weight:400;letter-spacing:.5px}
+  header p{opacity:.85;font-size:.9rem;margin-top:4px}
+  nav{display:flex;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  nav button{flex:1;padding:12px 4px;border:0;background:none;cursor:pointer;font-family:inherit;font-size:.85rem;color:var(--muted);border-bottom:3px solid transparent}
+  nav button.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+  main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .card h2{font-size:1.05rem;font-weight:600;margin-bottom:12px;font-family:'Helvetica Neue',Arial,sans-serif}
+  .card h3{font-size:.95rem;font-weight:600;margin:14px 0 8px;font-family:'Helvetica Neue',Arial,sans-serif}
+  .muted{color:var(--muted);font-size:.85rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:560px){.grid2{grid-template-columns:1fr}}
+  select,input[type=text],input[type=number],textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:.9rem;background:#fbfaf7}
+  textarea{resize:vertical;min-height:60px}
+  .btn{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer;font-family:'Helvetica Neue',Arial,sans-serif;font-size:.9rem}
+  .btn:hover{opacity:.9}
+  .btn.secondary{background:var(--chip);color:var(--accent)}
+  .btn.warn{background:#b0533b}
+  .score-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+  .score-row:last-child{border-bottom:0}
+  .score-row .name{font-weight:600}
+  .score-row .sanskrit{color:var(--muted);font-size:.8rem;font-style:italic}
+  .stars{display:flex;gap:4px}
+  .stars button{border:0;background:none;cursor:pointer;font-size:1.25rem;color:#d8d2c4}
+  .stars button.on{color:var(--accent2)}
+  .badge{display:inline-block;background:var(--chip);color:var(--accent);border-radius:20px;padding:3px 12px;font-size:.78rem;margin:2px 4px 2px 0;font-family:'Helvetica Neue',Arial,sans-serif}
+  .bar{height:10px;background:var(--chip);border-radius:6px;overflow:hidden;margin-top:4px}
+  .bar>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px;transition:width .4s}
+  .big-num{font-size:2.2rem;color:var(--accent)}
+  .flexrow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+  .history{font-size:.85rem;color:var(--muted)}
+  .history li{margin:4px 0}
+  .med-circle{width:180px;height:180px;border-radius:50%;margin:16px auto;display:flex;flex-direction:column;justify-content:center;align-items:center;background:radial-gradient(circle at 35% 30%,#8a9b7a,#6d7f5f);color:#fff;cursor:pointer;user-select:none;transition:transform 1.2s ease}
+  .med-circle.breathe{transform:scale(1.18)}
+  .med-circle h3{margin:0;color:#fff;font-weight:400}
+  .pose-list li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.9rem}
+  .pose-list li:last-child{border-bottom:0}
+  .check{width:20px;height:20px;cursor:pointer}
+  .flash{background:#f0ede2;border-radius:8px;padding:12px;margin-top:10px;font-size:.88rem}
+  .stat{flex:1;min-width:120px;background:var(--chip);border-radius:10px;padding:12px;text-align:center}
+  .stat .v{font-size:1.5rem;font-weight:600;color:var(--accent)}
+  .stat .l{font-size:.75rem;color:var(--muted);font-family:'Helvetica Neue',Arial,sans-serif}
+  footer{text-align:center;color:var(--muted);font-size:.75rem;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Sadhana</h1>
+  <p>Track yamas &amp; niyamas · meditate · monitor mindfulness · personalized yoga</p>
+</header>
+<nav class="sans">
+  <button class="active" data-tab="virtues">Virtues</button>
+  <button data-tab="meditate">Meditate</button>
+  <button data-tab="mindfulness">Mindfulness</button>
+  <button data-tab="yoga">Yoga</button>
+</nav>
+<main>
+
+<!-- ============ VIRTUES (Yama & Niyama) ============ -->
+<section id="tab-virtues">
+  <div class="card">
+    <h2>Today's Ethical Practice</h2>
+    <p class="muted">Rate how consciously you lived each of the ten yamas and niyamas today (1–5 stars). Scores save automatically and feed your weekly trend.</p>
+    <div class="grid2" style="margin-top:14px">
+      <div>
+        <h3 style="color:var(--accent)">Yama · Restraints</h3>
+        <div id="yamaList"></div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent2)">Niyama · Observances</h3>
+        <div id="niyamaList"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Reflection</h2>
+    <div class="flexrow">
+      <div style="flex:2">
+        <textarea id="reflectionText" placeholder="Where did one virtue come easily today? Where was it hard?"></textarea>
+      </div>
+      <button class="btn" onclick="saveReflection()">Save reflection</button>
+    </div>
+    <div id="reflectionSaved" class="flash" style="display:none"></div>
+  </div>
+  <div class="card">
+    <h2>Weekly Trend</h2>
+    <div id="trend"></div>
+  </div>
+</section>
+
+<!-- ============ MEDITATE ============ -->
+<section id="tab-meditate" style="display:none">
+  <div class="card">
+    <h2>Guided Meditation</h2>
+    <div class="flexrow">
+      <div>
+        <label class="muted">Session</label><br>
+        <select id="medType">
+          <option value="breath">Box Breathing (guided)</option>
+          <option value="focus">Focused Attention</option>
+          <option value="body">Body Scan</option>
+          <option value="loving">Loving-Kindness</option>
+        </select>
+      </div>
+      <div>
+        <label class="muted">Minutes</label><br>
+        <select id="medMinutes"><option>3</option><option selected>5</option><option>10</option><option>15</option><option>20</option></select>
+      </div>
+      <button class="btn" onclick="startMeditation()">Begin</button>
+    </div>
+    <div class="med-circle" id="medCircle" style="display:none" onclick="manualInhale()">
+      <h3 id="medPhase">Inhale</h3>
+      <div class="sans" id="medCount" style="font-size:2rem">4</div>
+    </div>
+    <div id="medPrompt" class="flash" style="display:none"></div>
+    <div class="sans muted" id="medTimer" style="text-align:center;margin-top:10px"></div>
+    <div style="text-align:center;margin-top:8px"><button class="btn warn" id="medStop" style="display:none" onclick="stopMeditation()">End session</button></div>
+  </div>
+  <div class="card">
+    <h2>Meditation Log</h2>
+    <p class="muted">Completed sessions are logged automatically.</p>
+    <div class="flexrow" id="medStats" style="margin-top:10px"></div>
+    <ul class="history" id="medHistory" style="margin-top:12px"></ul>
+  </div>
+</section>
+
+<!-- ============ MINDFULNESS ============ -->
+<section id="tab-mindfulness" style="display:none">
+  <div class="card">
+    <h2>Check In</h2>
+    <div class="grid2">
+      <div>
+        <label class="muted">Mindfulness level today (1–10)</label>
+        <input type="range" id="mindLevel" min="1" max="10" value="6" style="width:100%">
+      </div>
+      <div>
+        <label class="muted">Presence in daily life</label>
+        <select id="mindPresence">
+          <option>Mostly on autopilot</option>
+          <option selected>Mixed</option>
+          <option>Mostly present</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label class="muted">What pulled you away from presence today?</label>
+      <input type="text" id="mindDistraction" placeholder="e.g. phone scrolling, multitasking at work">
+    </div>
+    <div style="margin-top:12px"><button class="btn" onclick="saveCheckin()">Save check-in</button></div>
+  </div>
+  <div class="card">
+    <h2>Mindfulness Overview</h2>
+    <div class="flexrow" id="mindStats"></div>
+    <h3>Last 14 days</h3>
+    <svg id="mindChart" width="100%" height="140" viewBox="0 0 700 140" preserveAspectRatio="none"></svg>
+    <h3>Recent check-ins</h3>
+    <ul class="history" id="mindHistory"></ul>
+  </div>
+</section>
+
+<!-- ============ YOGA ============ -->
+<section id="tab-yoga" style="display:none">
+  <div class="card">
+    <h2>Personalized Recommendation</h2>
+    <p class="muted">Answer three questions; the app matches a practice to your state and pairs it with a virtue focus.</p>
+    <div class="grid2">
+      <div><label class="muted">How is your energy today?</label>
+        <select id="yEnergy"><option>Depleted</option><option selected>Balanced</option><option>High / restless</option></select></div>
+      <div><label class="muted">Body feels mostly…</label>
+        <select id="yBody"><option>Tense &amp; stiff</option><option selected>Neutral</option><option>Loose, needs grounding</option></select></div>
+      <div><label class="muted">What would serve you most?</label>
+        <select id="yGoal"><option>Calm &amp; down-regulate</option><option selected>Energize &amp; focus</option><option>Open &amp; release tension</option><option>Rest &amp; restore</option></select></div>
+      <div><label class="muted">Time available</label>
+        <select id="yTime"><option>10 minutes</option><option selected>20 minutes</option><option>45+ minutes</option></select></div>
+    </div>
+    <div style="margin-top:14px"><button class="btn" onclick="recommend()">Get my practice</button></div>
+    <div id="yogaResult"></div>
+  </div>
+  <div class="card">
+    <h2>Today's Yoga Completion</h2>
+    <p class="muted">Tick poses as you practice them.</p>
+    <ul class="pose-list" id="poseChecklist"></ul>
+    <div class="flexrow" id="yogaStats" style="margin-top:12px"></div>
+  </div>
+</section>
+
+</main>
+<footer>Sadhana · your data stays in this browser (localStorage)</footer>
+
+<script>
+const LS='sadhana_v1';
+const VIRTUES={
+ yama:[["Ahimsa","non-harm"],["Satya","truthfulness"],["Asteya","non-stealing"],["Brahmacharya","moderation"],["Aparigraha","non-possessiveness"]],
+ niyama:[["Shaucha","cleanliness"],["Santosha","contentment"],["Tapas","discipline"],["Svadhyaya","self-study"],["Ishvara Pranidhana","surrender"]]
+};
+function load(){try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}}
+function save(s){localStorage.setItem(LS,JSON.stringify(s))}
+let S=load();
+S.virtues=S.virtues||{}; S.reflections=S.reflections||[]; S.sessions=S.sessions||[];
+S.checkins=S.checkins||[]; S.practices=S.practices||[]; S.poseDone=S.poseDone||{};
+const todayKey=()=>new Date().toISOString().slice(0,10);
+const $=id=>document.getElementById(id);
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+ b.classList.add('active');
+ ['virtues','meditate','mindfulness','yoga'].forEach(t=>$('tab-'+t).style.display=(t===b.dataset.tab?'':'none'));
+});
+
+/* ---------- virtues ---------- */
+function starsHTML(v,name){
+ let h='<div class="stars">';
+ for(let i=1;i<=5;i++)h+='<button class="'+(i<=v?'on':'')+'" onclick="setScore(\''+name+'\','+i+')">★</button>';
+ return h+'</div>';
+}
+function renderVirtues(){
+ const y=$('yamaList'),n=$('niyamaList'); y.innerHTML='';n.innerHTML='';
+ const t=todayKey(); S.virtues[t]=S.virtues[t]||{};
+ const row=(group)=>VIRTUES[group].map(([name,meaning])=>{
+   const v=S.virtues[t][name]||0;
+   return '<div class="score-row"><div><div class="name">'+name+'</div><div class="sanskrit">'+meaning+'</div></div>'+starsHTML(v,name)+'</div>';
+ }).join('');
+ y.innerHTML=row('yama'); n.innerHTML=row('niyama');
+}
+function setScore(name,v){S.virtues[todayKey()][name]=v;save(S);renderVirtues();renderTrend();}
+function saveReflection(){
+ const txt=$('reflectionText').value.trim(); if(!txt)return;
+ S.reflections.push({date:todayKey(),text:txt}); save(S);
+ $('reflectionText').value='';
+ $('reflectionSaved').style.display='block';
+ $('reflectionSaved').textContent='Saved. '+S.reflections.length+' reflection'+(S.reflections.length>1?'s':'')+' recorded so far.';
+}
+function renderTrend(){
+ const days=[]; for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+ const avg=d=>{const v=Object.values(S.virtues[d]||{});return v.length?(v.reduce((a,b)=>a+b,0)/v.length):null};
+ const rows=days.map(d=>{const a=avg(d);return a===null?null:{d,a}});
+ let html='<div class="flexrow">';
+ rows.forEach(r=>{const pct=r?Math.round(r.a/5*100):0;
+   html+='<div class="stat"><div class="v">'+(r?r.a.toFixed(1):'–')+'</div><div class="l">'+(r?r.d.slice(5):'no data')+'</div><div class="bar"><div style="width:'+pct+'%"></div></div></div>';});
+ html+='</div>';
+ // weakest virtue over 7 days
+ const sums={}; days.forEach(d=>{for(const[k,v]of Object.entries(S.virtues[d]||{})){(sums[k]=sums[k]||[]).push(v)}});
+ let weak=null; for(const[k,arr]of Object.entries(sums)){const m=arr.reduce((a,b)=>a+b,0)/arr.length; if(!weak||m<weak.m)weak={k,m}}
+ if(weak)html+='<p class="muted" style="margin-top:10px">Focus virtue this week: <b>'+weak.k+'</b> (avg '+weak.m.toFixed(1)+'/5).</p>';
+ $('trend').innerHTML=html;
+}
+
+/* ---------- meditation ---------- */
+let med=null;
+const PROMPTS={focus:'Rest attention on the breath. When the mind wanders, return gently.',body:'Move attention slowly from feet to head, noticing sensation without judgment.',loving:'Silently offer goodwill: to yourself, a loved one, a stranger, a difficult person, all beings.'};
+function startMeditation(){
+ const type=$('medType').value,mins=parseInt($('medMinutes').value,10);
+ med={type,end:Date.now()+mins*60000,started:true};
+ if(type==='breath'){
+   $('medCircle').style.display='flex'; $('medPrompt').style.display='none';
+   phaseCycle('Inhale',4,'hold'); tickBreath();
+ }else{
+   $('medCircle').style.display='none'; $('medPrompt').style.display='block';
+   $('medPrompt').textContent=PROMPTS[type];
+ }
+ $('medStop').style.display='inline-block'; renderTimer(); med.int=setInterval(renderTimer,1000);
+}
+let breathTimer=null;
+function phaseCycle(phase,secs,next){
+ $('medPhase').textContent=phase; let c=secs; $('medCount').textContent=c;
+ const circ=$('medCircle');
+ circ.classList.toggle('breathe',phase==='Inhale');
+ clearInterval(breathTimer);
+ breathTimer=setInterval(()=>{
+   c--; if(c<=0){clearInterval(breathTimer);
+     if(phase==='Inhale')phaseCycle('Hold',4,'exhale');
+     else if(phase==='Hold')phaseCycle('Exhale',4,'hold2');
+     else if(phase==='Exhale')phaseCycle('Hold',4,'inhale');
+     else phaseCycle('Inhale',4,'hold');
+   } else $('medCount').textContent=c;
+ },1000);
+}
+function tickBreath(){} // cycle is self-sustaining
+function manualInhale(){}
+function renderTimer(){
+ if(!med)return;
+ const left=Math.max(0,Math.floor((med.end-Date.now())/1000));
+ $('medTimer').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0')+' remaining';
+ if(left<=0)finishMeditation(true);
+}
+function finishMeditation(completed){
+ clearInterval(med&&med.int); clearInterval(breathTimer);
+ if(med&&completed){
+   S.sessions.push({date:todayKey(),type:$('medType').value,minutes:parseInt($('medMinutes').value,10)});
+   save(S); renderMedLog();
+ }
+ med=null; breathTimer=null;
+ $('medCircle').style.display='none'; $('medPrompt').style.display='none';
+ $('medTimer').textContent=''; $('medStop').style.display='none';
+}
+function stopMeditation(){finishMeditation(false);}
+function renderMedLog(){
+ const total=S.sessions.reduce((a,s)=>a+s.minutes,0);
+ const thisWeek=S.sessions.filter(s=>(Date.now()-new Date(s.date))<7*864e5).length;
+ $('medStats').innerHTML='<div class="stat"><div class="v">'+S.sessions.length+'</div><div class="l">sessions</div></div>'+
+  '<div class="stat"><div class="v">'+total+'</div><div class="l">total minutes</div></div>'+
+  '<div class="stat"><div class="v">'+thisWeek+'</div><div class="l">this week</div></div>';
+ $('medHistory').innerHTML=S.sessions.slice(-8).reverse().map(s=>'<li>'+s.date+' · '+s.type+' · '+s.minutes+' min</li>').join('')||'<li>No sessions yet.</li>';
+}
+
+/* ---------- mindfulness ---------- */
+function saveCheckin(){
+ S.checkins.push({date:todayKey(),level:+$('mindLevel').value,presence:$('mindPresence').value,distraction:$('mindDistraction').value.trim()});
+ save(S); $('mindDistraction').value=''; renderMind();
+}
+function renderMind(){
+ const c=S.checkins.slice(-14), n=c.length;
+ const avg=n?(c.reduce((a,x)=>a+x.level,0)/n).toFixed(1):'–';
+ const present=S.checkins.filter(x=>x.presence==='Mostly present').length;
+ // 7-day streak of check-ins
+ let streak=0; for(let i=0;;i++){const d=new Date();d.setDate(d.getDate()-i);if(S.checkins.some(x=>x.date===d.toISOString().slice(0,10)))streak++;else break;}
+ $('mindStats').innerHTML='<div class="stat"><div class="v">'+avg+'</div><div class="l">avg level (last 14)</div></div>'+
+  '<div class="stat"><div class="v">'+streak+'</div><div class="l">day streak</div></div>'+
+  '<div class="stat"><div class="v">'+present+'</div><div class="l">mostly-present days</div></div>';
+ // chart
+ const svg=$('mindChart');
+ if(n===0){svg.innerHTML='<text x="350" y="70" text-anchor="middle" fill="#7a756c" font-size="13">No check-ins yet.</text>';}
+ else{
+  const W=700,H=140,pad=14;
+  const pts=c.map((x,i)=>[pad+i*(W-2*pad)/Math.max(n-1,1),H-pad-(x.level/10)*(H-2*pad)]);
+  let path=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  svg.innerHTML='<path d="'+path+'" fill="none" stroke="#6d7f5f" stroke-width="2.5"/>'+
+   pts.map((p,i)=>'<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.5" fill="#c98a5b"><title>'+c[i].date+': '+c[i].level+'/10</title></circle>').join('');
+ }
+ const dist=S.checkins.slice(-10).reverse().map(x=>'<li>'+x.date+' · '+x.level+'/10 · '+x.presence+(x.distraction?' · "'+x.distraction+'"':'')+'</li>').join('');
+ $('mindHistory').innerHTML=dist||'<li>No check-ins yet.</li>';
+}
+
+/* ---------- yoga ---------- */
+const PRACTICES=[
+ {id:'calm',name:'Slow Flow & Restorative',energy:'Depleted',goal:'Calm & down-regulate',virtue:'Santosha',time:'20 minutes',
+  poses:['Child\u2019s Pose (3 min)','Cat\u2013Cow (2 min)','Supported Bridge (3 min)','Seated Forward Fold (3 min)','Legs-Up-the-Wall (5 min)','Savasana (4 min)'],
+  note:'Move at half your normal pace. Let Santosha (contentment) guide you: no pushing, no comparing.'},
+ {id:'ground',name:'Gentle Grounding Sequence',energy:'Depleted',goal:'Rest & restore',virtue:'Ahimsa',time:'20 minutes',
+  poses:['Mountain Pose (2 min)','Standing Forward Fold (2 min)','Low Lunge, each side (3 min)','Supine Twist, each side (2 min)','Savasana with blanket (5 min)'],
+  note:'Practice Ahimsa (non-harm): support the body fully with props and stop at the first edge, not the last.'},
+ {id:'energize',name:'Sun Salutation Energizer',energy:'High / restless',goal:'Energize & focus',virtue:'Tapas',time:'20 minutes',
+  poses:['5 rounds Sun Salutation A (6 min)','Warrior I & II, each side (4 min)','Chair Pose holds (2 min)','Standing Balance: Tree (3 min)','Cool-down stretch (5 min)'],
+  note:'Channel restless energy with Tapas (disciplined effort): steady breath, precise alignment.'},
+ {id:'open',name:'Opening & Release Flow',energy:'Balanced',goal:'Open & release tension',virtue:'Aparigraha',time:'20 minutes',
+  poses:['Neck & shoulder rolls (2 min)','Thread the Needle, each side (3 min)','Low Cobra to Sphinx (3 min)','Pigeon Pose, each side (4 min)','Supported Fish & rest (4 min)'],
+  note:'Release is letting go: practice Aparigraha (non-possessiveness) by exhaling tension you no longer need.'},
+ {id:'focus',name:'Short Focus Reset',energy:'Balanced',goal:'Energize & focus',virtue:'Brahmacharya',time:'10 minutes',
+  poses:['Sun Salutation x3 (4 min)','Downward Dog hold (1 min)','Seated breathing with count (3 min)','One-minute stillness (2 min)'],
+  note:'A short dose of Brahmacharya (moderation): one task, one breath, no multitasking.'},
+ {id:'rest',name:'Full Restorative Session',energy:'Depleted',goal:'Rest & restore',virtue:'Ishvara Pranidhana',time:'45+ minutes',
+  poses:['Supported Child\u2019s Pose (5 min)','Reclined Butterfly (8 min)','Supported Bridge (5 min)','Side-lying twist, each side (5 min)','Legs-Up-the-Wall (10 min)','Savasana (10 min)'],
+  note:'Ishvara Pranidhana (surrender): let the props do the work; your only task is to soften.'},
+ {id:'tense',name:'Unwind the Tension Sequence',energy:'Balanced',goal:'Open & release tension',virtue:'Satya',time:'45+ minutes',
+  poses:['Joint warm-up (5 min)','Standing flows (8 min)','Deep hip openers (10 min)','Thoracic twists & backbends (8 min)','Long Savasana & scan (10 min)'],
+  note:'Practice Satya (truthfulness): meet the body exactly where it is today, without stories.'},
+ {id:'breath',name:'Breath-led Micro Practice',energy:'High / restless',goal:'Calm & down-regulate',virtue:'Svadhyaya',time:'10 minutes',
+  poses:['Seated posture & breath count (4 min)','Alternate nostril breathing (4 min)','Silent observation (2 min)'],
+  note:'Svadhyaya (self-study): simply watch the mind\u2019s weather without fixing it.'}
+];
+function pick(){
+ const e=$('yEnergy').value,b=$('yBody').value,g=$('yGoal').value,t=$('yTime').value;
+ // scoring: primary match on goal+energy, tie-break body & time
+ const score=p=>(p.goal===g?2:0)+(p.energy===e?2:0)+(b==='Tense & stiff'&&/release|Unwind|Opening/.test(p.name)?1:0)+(p.time===t?1:0);
+ return PRACTICES.slice().sort((a,b2)=>score(b2)-score(a))[0];
+}
+function recommend(){
+ const p=pick();
+ $('yogaResult').innerHTML='<div class="flash"><b>'+p.name+'</b> · '+p.time+'<br><span class="muted">'+p.note+'</span>'+
+  '<ul class="pose-list" style="margin-top:8px">'+p.poses.map(x=>'<li><span>'+x+'</span></li>').join('')+'</ul>'+
+  '<button class="btn secondary" style="margin-top:10px" onclick="usePractice(\''+p.id+'\')">Start this practice</button></div>';
+ S.lastRec=p.id; save(S); loadChecklist(p.poses);
+}
+function usePractice(id){
+ const p=PRACTICES.find(x=>x.id===id);
+ S.practices.push({date:todayKey(),id}); save(S);
+ loadChecklist(p.poses);
+ document.querySelector('nav button[data-tab=yoga]').click();
+}
+function loadChecklist(poses){
+ const t=todayKey(); S.poseDone[t]=S.poseDone[t]||{};
+ $('poseChecklist').innerHTML=poses.map(x=>{const k=escapeHtml(x);
+  return '<li><label style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" class="check" '+(S.poseDone[t][x]?'checked':'')+' onchange="togglePose(this,\''+k.replace(/'/g,"\\'")+'\')">'+x+'</label></li>';
+ }).join('');
+}
+function togglePose(cb,name){S.poseDone[todayKey()][name]=cb.checked;save(S);renderYogaStats();}
+function renderYogaStats(){
+ const t=todayKey(); const done=Object.values(S.poseDone[t]||{}).filter(Boolean).length;
+ const total=Object.values(S.poseDone[t]||{}).length;
+ const practiced=S.practices.length;
+ $('yogaStats').innerHTML='<div class="stat"><div class="v">'+(total?done+'/'+total:'0')+'</div><div class="l">poses today</div></div>'+
+  '<div class="stat"><div class="v">'+practiced+'</div><div class="l">practices started</div></div>';
+}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;').replace(/"/g,'&quot;')}
+
+/* ---------- init ---------- */
+renderVirtues(); renderTrend(); renderMedLog(); renderMind(); renderYogaStats();
+</script>
+</body>
+</html>
